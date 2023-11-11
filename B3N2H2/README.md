@@ -2,7 +2,7 @@
 
 ## Background
 
-This block is composed of Central Ave., in the Fairview neighbourhood of
+This block is a portion of Central Ave., in the Fairview neighbourhood of
 Halifax. Established primarily in the early 20th century, it's streets are laid
 out in a grid pattern up the eastern slope of Geizers Hill.
 
@@ -22,11 +22,11 @@ calming measures and road characteristics are captured here.
 
 | Parameter                    |  Value           | Notes
 | ---------------------------- | ---------------- | ---------
-| Camera Distance from road    |                  |
-| Camera Height from road      |                  |
-| Calibration settings         |                  |
-| Road width                   |                  | Sidewalk on one side only
-| Road grade (slope)           |                  | Primarily affects L2R travel (vehicles moving up hill)
+| Camera Distance from middle of  road    | 44ft             |
+| Camera Height from road      | 13ft             |
+| Calibration settings         | CAL_OBJ_MM_L2R = 4700, CAL_OBJ_MM_R2L = 4700 
+| Road width                   | 357" (29.75 feet)                 | Sidewalk on one side only
+| Road grade (slope)           | 7.5%                 | Primarily affects L2R travel (vehicles moving up hill). Slope begins a few metres after observed area
 | Posted speed limit           |  50km/h          |
 
 
@@ -34,7 +34,7 @@ calming measures and road characteristics are captured here.
 
 | Measure       | Distance & Positioning                       |
 | ------------- | -------------------------------------------  |
-| Speed Tables  | 1 speed table, ~XX metres up slope (L2R ->)  |
+| Speed Tables  | 1 speed table, at top of slope, roughly 100m from camera (L2R ->)  |
 | Speed Humps   | n/a                                          |
 | Chicanes      | n/a                                          |
 
@@ -51,9 +51,8 @@ November 10th (inclusive, midnight to midnight)
 | Mean                   | 37.36km/h
 | Total Traffic Observed | 4670
 | Total Records Removed  | 291
-| -----------------------| ---------
 
-Records were removed if they were captured travelling at a speed of 15km/h or
+Records were removed if they were captured traveling at a speed of 15km/h or
 less. This was observed to be vehicles parking on nearby drive ways, the odd
 cyclist, and delivery trucks pulling up to the curb.
 
@@ -75,7 +74,7 @@ All data collected is available in the CSV located within this directory: [speed
 
 ## Reflections
 
-The results of my test hold little surprises. I know this street is too wide
+The results of this test hold little surprises. This street is too wide
 and the single speed table installed up the slope has little effect. At a speed
 of 47km/h per hour at the 85th percentile, we see that most (85%) of vehicles
 go at or lower than the posted speed limit. However, it is silly that a
@@ -84,16 +83,23 @@ urban highway nearby, Joseph Howe)
 
 Additionally, we can see what is more problematic: There is plenty of
 opportunity to go faster than the posted speed limit. We see that 15% of
-vehicles are travelling over 47km/h, with some reaching variances as high as
+vehicles are traveling over 47km/h, with some reaching variances as high as
 60km/h. It is further concerning that we see typical speeds increase for L2R
 (Left to Right), as vehicles speed up the slope.
 
-Prior to the installation of speed humps & tables, my concerns were that there
-was too much variance in speeds. That variance continues. It is clear to me
-that an optimal solution to reduce motor vehicle speeds would be to reduce the
-width of the road.
+Prior to the installation of speed humps & tables, the primary concerns were
+around the spread in speeds. That spread continues to be significant, and it is
+clear that an optimal solution would be to reduce the width of the road.
 
 This could be achieved by adding a side walk on the other side of the road
-without encroaching on existing boulevards and property lines.  (TODO: Capture
-existing sidewalk width and compare tightening of road. Highlight loss of
-parking on both sides as a consequence)
+without encroaching on existing boulevards and property lines. The existing
+sidewalk is 58 inches wide. If a similar sidewalk was implemented on the other
+side, the resulting road width would be near 300" (25 feet), which is
+comparable to traffic calmed streets like Liverpool (between 26 and 27 feet in
+width dependent on location)
+
+Depending on where the sidewalks are implemented and the resulting road width,
+this could remove the ability for vehicles to park on both sides of the road.
+Currently, vehicles may park on both sides with ample room for vehicles to pass
+through (single file). There is no shortage of parking space on either side of
+the road and the majority of homes have drive ways.
