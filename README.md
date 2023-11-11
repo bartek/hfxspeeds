@@ -14,7 +14,7 @@ Although a DIY device can be imperfect, the methods used have been employed by a
 
 ## The Device
 
-The device is a Raspberry Pi Model 4, a camera module, and a case. Software is written by Claude Pageau and is [open source on GitHub](https://github.com/pageauc/speed-camera). This software is actively maintained and continues to improve with quality discussion and amendments.
+The device is a Raspberry Pi 4 Model B, a camera module, and a case. Software is written by Claude Pageau and is [open source on GitHub](https://github.com/pageauc/speed-camera). This software is actively maintained and continues to improve with quality discussion and amendments.
 
 
 ## References
