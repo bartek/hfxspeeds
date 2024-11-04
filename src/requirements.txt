@@ -1,3 +1,9 @@
+# blob store
+apache-libcloud
+fasteners
+
+# annotations
+tqdm
 opencv-python==4.10.0.84
 google-cloud-storage
 google-cloud-videointelligence

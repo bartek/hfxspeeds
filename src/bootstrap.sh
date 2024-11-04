@@ -7,6 +7,12 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 
 cat << EOF > requirements.txt
+# blob store
+apache-libcloud
+fasteners
+
+# annotations
+tqdm
 opencv-python==4.10.0.84
 google-cloud-storage
 google-cloud-videointelligence
