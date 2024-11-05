@@ -58,7 +58,6 @@ def annotate_video(bucket: Bucket, blob: Blob):
     annotations = json.loads(annotations_file.download_as_string().decode('utf-8'))
 
     cars_frame_lookup = extract_cars(annotations, frame_rate, distance, min_speed, min_distance)
-    print(cars_frame_lookup)
 
     temp = tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(blob.name)[1])
     temp_path = temp.name
