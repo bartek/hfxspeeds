@@ -5,8 +5,8 @@ import logging
 import os
 import tempfile
 import time
-from tqdm import tqdm
 
+from tqdm import tqdm
 from google.cloud import videointelligence_v1 as videointelligence
 from google.cloud import storage
 from google.cloud.storage.blob import Blob
@@ -45,12 +45,15 @@ class BlobState(Enum):
     FAILED = "failed"
 
 def annotate_video(bucket: Bucket, blob: Blob):
-    frame_rate = 15
-    distance = 10 # Need to measure distance captured in video
+    frame_rate = 30
+    distance = 20 # Need to measure distance captured in video
     min_speed = 5 # kmph
     min_distance = 0
-    width = 1920
-    height = 1080
+
+    # iPhone Vertical, exported
+    width = 360
+    height = 630 
+    # 360 640 29.994497340381184 8994 (w/h/fps/l)
 
     annotations_file = bucket.get_blob(f"annotations/{blob.name}.json")
     assert annotations_file is not None, "Expected annotations file does not exist"
@@ -76,11 +79,12 @@ def annotate_video(bucket: Bucket, blob: Blob):
 
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
     length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
+    # 360 640 29.994497340381184 8994
+    print(width, height, frame_rate, length)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Use MP4V codec
-    dest = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
+    dest = cv2.VideoWriter(out_path, fourcc, frame_rate, (width, height))
     assert dest.isOpened(), "Failed to open output video"
 
     def frame_iter():
@@ -96,7 +100,7 @@ def annotate_video(bucket: Bucket, blob: Blob):
         logging.debug("annotating frame #%s", frame_number)
         for idx, car in enumerate(cars_frame_lookup):
             if frame_number in car:
-                logging.debug("car #%s = %s", idx, car[frame_number])
+                logging.info("car #%s = %s", idx, car[frame_number])
                 frame = cv2.rectangle(
                     frame,
                     box_start(car[frame_number], width, height),

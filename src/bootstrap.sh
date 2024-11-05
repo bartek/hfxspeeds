@@ -11,8 +11,10 @@ cat << EOF > requirements.txt
 apache-libcloud
 fasteners
 
-# annotations
+# terminal
 tqdm
+
+# annotations
 opencv-python==4.10.0.84
 google-cloud-storage
 google-cloud-videointelligence
