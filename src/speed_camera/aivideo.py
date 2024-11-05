@@ -40,10 +40,16 @@ def annotate_video(bucket: Bucket, blob: Blob):
     min_speed = 5 # kmph
     min_distance = 0
 
+
+    # Get state for frame rate, width, height
+    state_file = bucket.blob(f"{blob.name}.meta")
+    assert state_file is not None, "should not be annotating if no state file"
+
+    state_contents = json.loads(state_file.download_as_string().decode('utf-8'))
+
     # iPhone Vertical, exported
-    width = 360
-    height = 630 
-    # 360 640 29.994497340381184 8994 (w/h/fps/l)
+    width = state_contents["attributes"]["width"]
+    height = state_contents["attributes"]["height"]
 
     annotations_file = bucket.get_blob(f"annotations/{blob.name}.json")
     assert annotations_file is not None, "Expected annotations file does not exist"
@@ -136,12 +142,16 @@ def intelligence_annotate(bucket: Bucket, blob: Blob):
 
     operation.result(timeout=1200) # Blocking
 
-    # Success, write to the state file with the annotations path
-    blob = bucket.blob(f"{blob.name}.meta")
-    blob.upload_from_string(json.dumps({
+    # Obtain the existing metadata file and update it with the annotations path
+    # TODO: Make this more repeatable
+    state_file = bucket.blob(f"{blob.name}.meta")
+    assert state_file is not None, "should not be annotating if no state file"
+
+    contents = json.loads(state_file.download_as_string().decode('utf-8'))
+    contents.update({
         "annotations": output_uri,
         "last_updated": int(time.time())
-    }))
+    })
 
-    print(operation)
+    state_file.upload_from_string(json.dumps(contents))
 

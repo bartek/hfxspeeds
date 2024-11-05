@@ -2,10 +2,12 @@ from enum import Enum
 import argparse
 import json
 import logging
+import os
 
 from google.cloud import storage
 
 from .aivideo import intelligence_annotate, annotate_video
+from .video import read_and_upload
 
 from google.cloud.storage.blob import Blob
 from google.cloud.storage.bucket import Bucket
@@ -60,6 +62,9 @@ def object_state(bucket: Bucket, blob: Blob) -> BlobState:
     contents = json.loads(state_file.download_as_string().decode('utf-8'))
     print(contents)
 
+    if 'annotations' not in contents:
+        return BlobState.PENDING
+
     # Otherwise, read the file. It's just JSON with some data:
     # {
     #   "annotations": "gs://bucket/path/to/annotations.json",
@@ -70,6 +75,17 @@ def object_state(bucket: Bucket, blob: Blob) -> BlobState:
         return BlobState.NEEDS_ANNOTATION
 
     return BlobState.PROCESSED
+
+def read_recursive(path: str) -> list:
+    found = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            found.append(os.path.join(root, file))
+    return found
+
+# First, check local directory and see if there's anything worth uploading
+for file in read_recursive("sample_data"):
+    read_and_upload(bucket, file)
 
 # TODO: Check for args.process, and do that. Otherwise, capture video and upload procedure
 bucket.list_blobs()
