@@ -1,4 +1,3 @@
-from enum import Enum
 import cv2
 import json
 import logging
@@ -34,15 +33,6 @@ def box_start(box, width, height):
 
 def box_end(box, width, height):
     return normalised_to_xy(box["right"], box["bottom"], width, height)
-
-class BlobState(Enum):
-    PENDING = "pending"
-    # NEEDS_ANNOTATION is when file has been processed by Google Video AI (and
-    # annotations exist), but have not been processed against the original
-    # video.
-    NEEDS_ANNOTATION = "needs_annotation"
-    PROCESSED = "processed"
-    FAILED = "failed"
 
 def annotate_video(bucket: Bucket, blob: Blob):
     frame_rate = 30
@@ -154,38 +144,4 @@ def intelligence_annotate(bucket: Bucket, blob: Blob):
     }))
 
     print(operation)
-
-# Obtain state about object in bucket.
-def object_state(bucket: Bucket, blob: Blob) -> BlobState:
-    state_file = bucket.get_blob(f"{blob.name}.meta")
-    if state_file is None:
-        return BlobState.PENDING
-
-    contents = json.loads(state_file.download_as_string().decode('utf-8'))
-    print(contents)
-
-    # Otherwise, read the file. It's just JSON with some data:
-    # {
-    #   "annotations": "gs://bucket/path/to/annotations.json",
-    #   ... other results file
-    #   "last_updated": int64
-    # }
-    if 'annotations' in contents and 'output' not in contents:
-        return BlobState.NEEDS_ANNOTATION
-
-    return BlobState.PROCESSED
-
-def upload_and_annotate(bucket: Bucket, blob: Blob):
-    match object_state(bucket, blob):
-        case BlobState.PENDING:
-            # Upload this to Video AI API
-            logging.info("Processing %s with Video AI API", blob.name)
-            intelligence_annotate(bucket, blob)
-        case BlobState.NEEDS_ANNOTATION:
-            logging.info("Blob %s is currently processing, skipping", blob.name)
-            annotate_video(bucket, blob)
-        case BlobState.PROCESSED:
-            logging.info("Blob %s is already processed", blob.name)
-        case BlobState.FAILED:
-            logging.info("Blob %s failed processing", blob.name)
 
